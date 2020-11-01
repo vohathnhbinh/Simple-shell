@@ -2,36 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#define MAX_LINE 80
 
-char* readCommand(char *args[]) {
-    char *str, *p;
-    str = (char *)malloc((2097152+1) * sizeof(char));
-    fgets(str, 2097152, stdin);
-    char *temp;
-    temp = str;
-
-    int i = 1;
-    args[0] = p = strtok(str, " \n\t");
-    while(p != NULL) {
-        args[i] = p = strtok(NULL, " \n\t");
-        i++;
-    }
-    free(str);
-    return temp;
-    // Return the whole command line.
-}
-
-int shouldWait(char *args[]) {
+void splitCommand(char *cmd, char *args[], int *param_num) {
     int i = 0;
-    while(args[i]) {
-        if(args[i] == "&") {
-            args[i] = NULL;
-            return 1;
-        }
-        i++;
+    char *pch = strtok(cmd, " ");
+    while(pch != NULL) {
+        args[i] = pch;
+        pch = strtok(NULL, " ");
+        *param_num = ++i;
     }
-    return 0;
+    args[i] = NULL;
 }
-/* Check whether or not the parent process is to wait for the child to exit.
-If yes => replace "&" with NULL and return true.
-else => return false. */
