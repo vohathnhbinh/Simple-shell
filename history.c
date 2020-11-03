@@ -1,29 +1,45 @@
 #include "header.h"
-#include <string.h>
-#include <stdio.h>
 
-void historySave(char *cmd, char *hist_list[], int *hist_index) {
+void historySave(char *cmd, char *hist_list[], int *hist_num) {
     if(cmd[0] != '!') {
-        hist_list[*hist_index] = cmd;
-        ++*hist_index;
+        hist_list[*hist_num] = (char*)malloc(sizeof(char) * (strlen(cmd) + 1));
+        strcpy(hist_list[*hist_num], cmd);
+        ++*hist_num;
     }
 }
 
-void showHistory(char *hist_list[], int hist_index) {
-    for(int i = 0; i < hist_index; i++) {
+void showHistory(char *hist_list[], int hist_num) {
+    for(int i = 0; i < hist_num; i++) {
         printf("%d\t%s\n", i + 1, hist_list[i]);
     }
 }
 
-void loadLastCmd(char *hist_list[], int hist_index, char *args[], int param_num) {
-    if(hist_list[hist_index - 1][0] == '\0') {
+int loadLastCmd(char *hist_list[], int hist_num, char *args[], int *param_num) {
+    if(hist_list[hist_num - 1][0] == '\0' || hist_num == 0) {
         printf("There is no previous command.\n");
-    }
-    else if(strlen(hist_list[hist_index - 1]) == 1 &&
-            hist_list[hist_index - 1][0] == '&') {
-        return;
+        return 0;
     }
     else {
-        splitCommand(hist_list[hist_index - 1], args, &param_num);
+        splitCommand(hist_list[hist_num - 1], args, &*param_num);
+        printf("%s\n", hist_list[hist_num - 1]);
+        return 1;
+    }
+}
+
+int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], int *param_num) {
+    int entry_num = 0;
+    for(int i = 1; i <= 4; i++) {
+        if(cmd[i] != '\0') {
+            entry_num = entry_num * 10 + (cmd[i] - '0');
+        }
+    }
+    if(entry_num <= hist_num && entry_num >= 1) {
+        splitCommand(hist_list[entry_num - 1], args, &*param_num);
+        printf("%s\n", hist_list[entry_num - 1]);
+        return 1;
+    }
+    else {
+        printf("Event !%d not found.\n", entry_num);
+        return 0;
     }
 }
