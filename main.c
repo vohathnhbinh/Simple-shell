@@ -1,29 +1,24 @@
 #include "header.h"
 
-#define MAX_LINE 80
-
 int main(void) {
     char *args[MAX_LINE/2 + 1];
     char *hist_list[1000];
     int hist_num = 0;
     int should_run = 1;
-    int check_child1 = 0, check_child2 = 0;
-    pid_t previous_pid;
-    pid_t previousprevious_pid;
-    printf("----Very Simple Shell\n\n");
+    printf("\n----Very Simple Shell\n\n");
     while (should_run) {
+        signal(SIGCHLD, childHandler);
+
         for(int i = 0; i < MAX_LINE/2 + 1; i++) {
             args[i] = NULL;
         }
         // Empty args
 
-        signal(SIGCHLD, childHandler);
-
         printf("osh>");
         fflush(stdout);
 
-        char *cmd = (char *)malloc(MAX_LINE * sizeof(char));
-        fgets(cmd, MAX_LINE, stdin);
+        char *cmd = (char *)malloc((MAX_LINE + 1) * sizeof(char));
+        fgets(cmd, MAX_LINE + 1, stdin);
         cmd[strlen(cmd) - 1] = '\0';
         // Replace '\n' with '\0'
 
@@ -67,6 +62,7 @@ int main(void) {
                 should_wait = 0;
                 args[param_num - 1] = NULL;
                 --param_num;
+                cmd[strlen(cmd) - 1] = '\0';
             }
             // Check whether or not the parent process is to wait for the child to exit.
             
@@ -79,11 +75,10 @@ int main(void) {
         // Create child process
         pid_t child;
         int child_status;
-        
         child = fork();
         switch(child) {
             case -1:
-                printf("Fail to create a child process!.\n");
+                printf("Fail to create a child process!\n");
                 exit(EXIT_FAILURE);
                 break;
             case 0:
@@ -91,28 +86,20 @@ int main(void) {
                     showHistory(hist_list, hist_num);
                 }
                 else if(execvp(args[0], args) < 0) {
-                    printf("Executing command fails.\n");
+                    printf("%s: Command not found.\n", args[0]);
                 }
                 exit(EXIT_FAILURE);
                 break;
             default:
                 if(should_wait) {
                     wait(&child_status);
-                    if(check_child1) {
-                        printf("Child %ld has exited.\n", previous_pid);
-                        check_child1 = 0;
-                    }
                 }
                 else {
-                    printf("Child %ld\n", child);
-                    previous_pid = child;
-                    check_child1 = 1;
-                    if(check_child2) {
-                        printf("Child %ld has exited.\n", previousprevious_pid);
-                        check_child2 = 0;
+                    printf("%ld\n", child);
+                    waitpid(child, &child_status, WUNTRACED);
+                    if(WIFEXITED(child_status)) {
+                        printf("+ Exit\t\t\t%s\n", cmd);
                     }
-                    check_child2 = 1;
-                    previousprevious_pid = previous_pid;
                 }
         }
         

@@ -29,7 +29,7 @@ int loadLastCmd(char *hist_list[], int hist_num, char *args[], int *param_num) {
 int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], int *param_num) {
     int entry_num = 0;
     for(int i = 1; i <= 4; i++) {
-        if(cmd[i] != '\0') {
+        if(cmd[i] != '\0' && cmd[i] >= '0' && cmd[i] <= '9') {
             entry_num = entry_num * 10 + (cmd[i] - '0');
         }
     }
@@ -39,7 +39,7 @@ int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], in
         return 1;
     }
     else {
-        printf("Event !%d not found.\n", entry_num);
+        printf("Event %s not found.\n", cmd);
         return 0;
     }
 }

@@ -10,6 +10,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+#define MAX_LINE 80
+
 // Essential
 void splitCommand(char *cmd, char *args[], int *param_num);
 void childHandler(int sig);

@@ -1,7 +1,5 @@
 #include "header.h"
 
-#define MAX_LINE 80
-
 void splitCommand(char *cmd, char *args[], int *param_num) {
     int i = 0;
     
