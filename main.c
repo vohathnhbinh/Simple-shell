@@ -7,8 +7,6 @@ int main(void) {
     int should_run = 1;
     printf("\n----Very Simple Shell\n\n");
     while (should_run) {
-        signal(SIGCHLD, childHandler);
-
         for(int i = 0; i < MAX_LINE/2 + 1; i++) {
             args[i] = NULL;
         }
@@ -27,13 +25,13 @@ int main(void) {
             isEmpty = 1;
         }
 
+        int param_num = 0;
         int shouldShowHistory = 0;
         int should_wait = 1;
         if(!isEmpty) {
             historySave(cmd, hist_list, &hist_num);
             // Save command to History
 
-            int param_num = 0;
             splitCommand(cmd, args, &param_num);
             // Read string from user and split into seperated command and parameters
 

@@ -17,9 +17,3 @@ void splitCommand(char *cmd, char *args[], int *param_num) {
         args[i] = NULL;
     }
 }
-
-void childHandler(int sig) {
-    pid_t pid;
-    int status;
-    pid = waitpid(-1, &status, WNOHANG);
-}
