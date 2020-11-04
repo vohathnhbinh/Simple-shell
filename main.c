@@ -97,6 +97,11 @@ int main(void) {
 					strcpy(filename,arg[param_num-1]);
 					printf("Redirect > %s",*filename);
 					fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, mode); 
+					if (fd < 0)
+						{
+							perror("open error");
+							exit(0);
+						}
 					
 					dup2(fd, STDOUT_FILENO);
 					arg[1] = NULL;
@@ -108,6 +113,11 @@ int main(void) {
 					strcpy(filename,arg[param_num-1]);
 					printf("Redirect < %s",*filename);
 					fd = open(filename, O_RDONLY, 0); 
+					if (fd < 0)
+						{
+							perror("open error");
+							exit(0);
+						}
 					
 					dup2(fd, STDIN_FILENO);
 
