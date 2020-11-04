@@ -17,3 +17,22 @@ void splitCommand(char *cmd, char *args[], int *param_num) {
         args[i] = NULL;
     }
 }
+
+int isDirection(char *args[], int n) {
+    int count = 0, returns = 0;
+    for (int i = 0; i < n-1; i++) {
+        if ((strcmp(args[i],">") == 0)) {
+			args[i]=NULL;
+            returns = 1; 
+            count += 1;
+        }
+        else if ((strcmp(args[i],"<") == 0)) {
+			args[i]=NULL;
+            returns = 2;
+            count += 1;
+        }
+    }
+    if (count != 1) return -1;
+    return returns;
+}
+

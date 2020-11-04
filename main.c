@@ -82,7 +82,41 @@ int main(void) {
             case 0:
                 if(shouldShowHistory) {
                     showHistory(hist_list, hist_num);
-                }
+                } else if (isDirection(args, param_num) == 1) {
+					int fd; 
+					char* filename = (char*)malloc(sizeof(char) * strlen(args[param_num-1]));					
+					mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;	
+					
+					strcpy(filename,args[param_num-1]);
+					printf("Redirect > %s",*filename);
+					fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, mode); 
+					if (fd < 0)
+						{
+							perror("open error");
+							exit(0);
+						}
+					
+					dup2(fd, STDOUT_FILENO);
+					args[1] = NULL;
+					execvp(args[0],args);
+					close(fd);
+				} else if (isDirection(args, param_num) == 2) {
+					int fd; 
+					char* filename = (char*)malloc(sizeof(char) * strlen(args[param_num-1]));						
+					strcpy(filename,args[param_num-1]);
+					printf("Redirect < %s",*filename);
+					fd = open(filename, O_RDONLY, 0); 
+					if (fd < 0)
+						{
+							perror("open error");
+							exit(0);
+						}
+					
+					dup2(fd, STDIN_FILENO);
+
+					execvp(args[0],args);
+					close(fd);
+				}
                 else if(execvp(args[0], args) < 0) {
                     printf("%s: Command not found.\n", args[0]);
                 }

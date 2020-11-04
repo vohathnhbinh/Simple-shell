@@ -9,12 +9,14 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #define MAX_LINE 80
 
-// Essential
+// Essential + Direction
 void splitCommand(char *cmd, char *args[], int *param_num);
 void childHandler(int sig);
+int isDirection(char *args[], int n);
 
 // History
 void historySave(char *cmd, char *hist_list[], int *hist_num);
