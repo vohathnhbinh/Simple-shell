@@ -89,7 +89,31 @@ int main(void) {
             case 0:
                 if(shouldShowHistory) {
                     showHistory(hist_list, hist_num);
-                }
+                } else if (isDirection(arg, param_num) == 1) {
+					int fd; 
+					char* filename = new char[strlen(arg[param_num-1])];					
+					mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;	
+					
+					strcpy(filename,arg[param_num-1]);
+					printf("Redirect > %s",*filename);
+					fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, mode); 
+					
+					dup2(fd, STDOUT_FILENO);
+					arg[1] = NULL;
+					execvp(arg[0],arg);
+					close(fd);
+				} else if (isDirection(arg, param_num) == 2) {
+					int fd; 
+					char* filename = new char[strlen(arg[param_num-1])];						
+					strcpy(filename,arg[param_num-1]);
+					printf("Redirect < %s",*filename);
+					fd = open(filename, O_RDONLY, 0); 
+					
+					dup2(fd, STDIN_FILENO);
+
+					execvp(arg[0],arg);
+					close(fd);
+				}
                 else if(execvp(args[0], args) < 0) {
                     printf("Executing command fails.\n");
                 }

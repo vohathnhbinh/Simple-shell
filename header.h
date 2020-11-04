@@ -10,9 +10,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-// Essential
+// Essential + Direction
 void splitCommand(char *cmd, char *args[], int *param_num);
 void childHandler(int sig);
+int isDirection(char *arg[], int n);
+int ReadFile(char* fileName, char* arg[], int &n);
+int WriteFile(char* fileName, char* res[], int n);
 
 // History
 void historySave(char *cmd, char *hist_list[], int *hist_num);

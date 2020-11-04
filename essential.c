@@ -25,3 +25,52 @@ void childHandler(int sig) {
     int status;
     pid = waitpid(-1, &status, WNOHANG);
 }
+
+int isDirection(char *arg[], int n) {
+    int count = 0, returns = 0;
+    for (int i = 0; i < n-1; i++) {
+        if ((strcmp(arg[i],">") == 0)) {
+            returns = 1; 
+            count += 1;
+        }
+        else if ((strcmp(arg[i],"<") == 0)) {
+            returns = 2;
+            count += 1;
+        }
+    }
+    if (count != 1) return -1;
+    return returns;
+}
+
+//direction <
+//n: length of arg
+int ReadFile(char* fileName, char* arg[], int &n)
+{
+	FILE *f = fopen(fileName, "rt");
+	if (f == NULL) //can't open file
+		return -1; 
+	while (!feof(f)) 
+	{
+		arg[n] = new char[MAX_LENGTH]; 
+		fscanf(f, "%s", arg[n]);
+		n++;
+	}
+
+	arg[k++] = NULL;
+	fclose(f);
+	return 0; 
+}
+
+//Direction >
+//res: store result
+int WriteFile(char* fileName, char* res[], int n)
+{
+	FILE *f = fopen(fileName, "wt+");
+	if (f == NULL)
+		return -1;
+	fprintf(f, "%s", res[0]);
+	for (int i = 1; i < n; i++)
+		fprintf(f, " %s", res[i]);
+	fclose(f);
+	return 0;
+}
