@@ -1,6 +1,7 @@
 #include "header.h"
 
 int main(void) {
+    
     char *args[MAX_LINE/2 + 1];
     char *hist_list[1000];
     int hist_num = 0;

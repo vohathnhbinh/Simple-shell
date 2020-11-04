@@ -17,7 +17,7 @@
 void splitCommand(char *cmd, char *args[], int *param_num);
 void childHandler(int sig);
 int isDirection(char *args[], int n);
-
+void createPipe(char *cmd, char* left[], char* right[]);
 // History
 void historySave(char *cmd, char *hist_list[], int *hist_num);
 void showHistory(char *hist_list[], int hist_num);
