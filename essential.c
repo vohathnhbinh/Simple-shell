@@ -36,10 +36,12 @@ int isDirection(char *args[], int n) {
     return returns;
 }
 
-void createPipe(char *cmd, char* left[], char* right[]) {
+int tokenizeCmd(char *cmd, char* left[], char* right[], int *param_num_left, int *param_num_right) {
     char **next = left;
+    char *dummy = (char*)malloc(sizeof(char) * (strlen(cmd) + 1));
+    strcpy(dummy, cmd);
 
-    char *temp = strtok(cmd, " ");
+    char *temp = strtok(dummy, " ");
     while (temp != NULL)
     {
         
@@ -47,6 +49,8 @@ void createPipe(char *cmd, char* left[], char* right[]) {
         
         //printf("%s\n", temp);
         temp = strtok(NULL, " ");
+        ++*param_num_left;
+        if (temp == NULL) break;
         if (strcmp(temp, "|") == 0) {
             break;
         }
@@ -64,8 +68,11 @@ void createPipe(char *cmd, char* left[], char* right[]) {
         *next++ = temp;
         //printf("%s\n", temp);
         temp = strtok(NULL, " ");
+        ++*param_num_right;
     }
     *next = NULL;
+    if(right[0] == NULL) return 0;
+    return 1;
 }
 
 int execPipe(char* left[], char* right[]) {
@@ -82,7 +89,7 @@ int execPipe(char* left[], char* right[]) {
         dup2(fd[1], STDOUT_FILENO);
         close(fd[1]);
         close(fd[0]);
-        execvp(left[0], left);
+        execCommand(left);
     }
 
     int pid2 = fork();
@@ -93,7 +100,7 @@ int execPipe(char* left[], char* right[]) {
         dup2(fd[0], STDIN_FILENO);
         close(fd[0]);
         close(fd[1]);
-        execvp(right[0], right);
+        execCommand(right);
     }
     close(fd[0]);
     close(fd[1]);
@@ -101,6 +108,13 @@ int execPipe(char* left[], char* right[]) {
     waitpid(pid2, NULL, 0);
 }
 
+void execCommand(char *args[]) {
+    if(execvp(args[0], args) < 0) {
+        printf("Executing command fails.\n");
+    }
+}
+
+// debug
 /*int main()
 {
     char *cmd = (char *)malloc((MAX_LINE + 1) * sizeof(char));
