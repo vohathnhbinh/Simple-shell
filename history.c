@@ -14,19 +14,19 @@ void showHistory(char *hist_list[], int hist_num) {
     }
 }
 
-int loadLastCmd(char *hist_list[], int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *isPipe) {
+int loadLastCmd(char *hist_list[], int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *is_pipe) {
     if(hist_list[hist_num - 1][0] == '\0' || hist_num == 0) {
         printf("There is no previous command.\n");
         return 0;
     }
     else {
-        *isPipe = tokenizeCmd(hist_list[hist_num - 1], args, right, &*param_num_l, &*param_num_r);
+        *is_pipe = tokenizeCmd(hist_list[hist_num - 1], args, right, &*param_num_l, &*param_num_r);
         printf("%s\n", hist_list[hist_num - 1]);
         return 1;
     }
 }
 
-int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *isPipe) {
+int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *is_pipe) {
     int entry_num = 0;
     for(int i = 1; i <= 4; i++) {
         if(cmd[i] != '\0' && cmd[i] >= '0' && cmd[i] <= '9') {
@@ -34,7 +34,7 @@ int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], ch
         }
     }
     if(entry_num <= hist_num && entry_num >= 1) {
-        *isPipe = tokenizeCmd(hist_list[hist_num - 1], args, right, &*param_num_l, &*param_num_r);
+        *is_pipe = tokenizeCmd(hist_list[hist_num - 1], args, right, &*param_num_l, &*param_num_r);
         printf("%s\n", hist_list[entry_num - 1]);
         return 1;
     }

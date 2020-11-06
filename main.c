@@ -1,7 +1,6 @@
 #include "header.h"
 
 int main(void) {
-    
     char *args[MAX_LINE/2 + 1];
     char *right[MAX_LINE/2 + 1];
     char *hist_list[1000];
@@ -17,25 +16,25 @@ int main(void) {
         cmd[strlen(cmd) - 1] = '\0';
         // Replace '\n' with '\0'
 
-        int isEmpty = 0;
+        int is_empty = 0;
         if(cmd[0] == '\0') {
-            isEmpty = 1;
+            is_empty = 1;
         }
 
         int param_num_l = 0;
         int param_num_r = 0;
-        int shouldShowHistory = 0;
+        int should_show_history = 0;
         int should_wait = 1;
-        int isPipe = 0;
-        if(!isEmpty) {
+        int is_pipe = 0;
+        if(!is_empty) {
             historySave(cmd, hist_list, &hist_num);
             // Save command to History
 
-            isPipe = tokenizeCmd(cmd, args, right, &param_num_l, &param_num_r);
+            is_pipe = tokenizeCmd(cmd, args, right, &param_num_l, &param_num_r);
             // Read string from user and split into seperated command and parameters
 
             if(strcmp(cmd, "!!") == 0) {
-                if(!loadLastCmd(hist_list, hist_num, args, right, &param_num_l, &param_num_r, &isPipe)) {
+                if(!loadLastCmd(hist_list, hist_num, args, right, &param_num_l, &param_num_r, &is_pipe)) {
                     continue;
                 }
             }
@@ -43,7 +42,7 @@ int main(void) {
             // Should be placed above all builtin commands. Ex: history
 
             if(cmd[0] == '!' && cmd[1] != '!') {
-                if(!loadSpecificCmd(hist_list, cmd, hist_num, args, right, &param_num_l, &param_num_r, &isPipe)) {
+                if(!loadSpecificCmd(hist_list, cmd, hist_num, args, right, &param_num_l, &param_num_r, &is_pipe)) {
                     continue;
                 }
             }
@@ -52,7 +51,7 @@ int main(void) {
 
             if((strcmp(args[0], "history") == 0 && args[1] == NULL) ||
             (strcmp(args[0], "history") == 0 && strcmp(args[1], "&") == 0 && args[2] == NULL)) {
-                shouldShowHistory = 1;
+                should_show_history = 1;
             }
            
             int isAmpersand = 0;
@@ -65,11 +64,14 @@ int main(void) {
             }
             if(right[0] != NULL) {
                 if(strcmp(right[param_num_r - 1], "&") == 0 && strcmp(right[0], "&") != 0) {
-                if(!isAmpersand) should_wait = 0;
-                right[param_num_r - 1] = NULL;
-                --param_num_r;
-                cmd[strlen(cmd) - 1] = '\0';
-            }
+                    if(!isAmpersand) {
+                        should_wait = 0;
+                        right[param_num_r - 1] = NULL;
+                        --param_num_r;
+                        cmd[strlen(cmd) - 1] = '\0';
+                    }
+                    else continue;
+                }
             }
             // Check whether or not the parent process is to wait for the child to exit.
             
@@ -93,10 +95,10 @@ int main(void) {
                 exit(EXIT_FAILURE);
                 break;
             case 0:
-                if(shouldShowHistory) {
+                if(should_show_history) {
                     showHistory(hist_list, hist_num);
                 }
-                else if (isPipe) {
+                else if (is_pipe) {
                     execPipe(args, right);
                 }
                 else if (direction == 1) {

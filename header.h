@@ -23,7 +23,7 @@ void execCommand(char *args[]);
 // History
 void historySave(char *cmd, char *hist_list[], int *hist_num);
 void showHistory(char *hist_list[], int hist_num);
-int loadLastCmd(char *hist_list[], int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *isPipe);
-int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *isPipe);
+int loadLastCmd(char *hist_list[], int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *is_pipe);
+int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *is_pipe);
 
 #endif
