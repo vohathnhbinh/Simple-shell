@@ -34,7 +34,7 @@ int loadSpecificCmd(char *hist_list[], char *cmd, int hist_num, char *args[], ch
         }
     }
     if(entry_num <= hist_num && entry_num >= 1) {
-        *is_pipe = tokenizeCmd(hist_list[hist_num - 1], args, right, &*param_num_l, &*param_num_r);
+        *is_pipe = tokenizeCmd(hist_list[entry_num - 1], args, right, &*param_num_l, &*param_num_r);
         printf("%s\n", hist_list[entry_num - 1]);
         return 1;
     }

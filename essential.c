@@ -37,16 +37,16 @@ int isDirection(char *args[], int n) {
 }
 
 int tokenizeCmd(char *cmd, char* left[], char* right[], int *param_num_left, int *param_num_right) {
+    *param_num_left = *param_num_right = 0;
     char **next = left;
     char *dummy = (char*)malloc(sizeof(char) * (strlen(cmd) + 1));
     strcpy(dummy, cmd);
-
+    int i = 0;
     char *temp = strtok(dummy, " ");
     while (temp != NULL)
     {
-        
         *next++ = temp;
-        
+        ++i;
         //printf("%s\n", temp);
         temp = strtok(NULL, " ");
         ++*param_num_left;
@@ -55,7 +55,9 @@ int tokenizeCmd(char *cmd, char* left[], char* right[], int *param_num_left, int
             break;
         }
     }
+    left[i] = NULL;
 
+    i = 0;
     *next = NULL;
     next = right;
     while (temp != NULL)
@@ -66,10 +68,13 @@ int tokenizeCmd(char *cmd, char* left[], char* right[], int *param_num_left, int
             continue;
         }
         *next++ = temp;
+        ++i;
         //printf("%s\n", temp);
         temp = strtok(NULL, " ");
         ++*param_num_right;
     }
+    right[i] = NULL;
+
     *next = NULL;
     if(right[0] == NULL) return 0;
     return 1;
