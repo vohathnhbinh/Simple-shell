@@ -13,9 +13,8 @@
 
 #define MAX_LINE 80
 
-// Essential + Direction
+// Essential + Redirect + Pipeline
 void splitCommand(char *cmd, char *args[], int *param_num);
-void childHandler(int sig);
 int isDirection(char *args[], int n);
 int tokenizeCmd(char *cmd, char* left[], char* right[], int *param_num_left, int *param_num_right);
 int execPipe(char* left[], char* right[]);
