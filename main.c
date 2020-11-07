@@ -8,7 +8,9 @@ int main(void) {
     int should_run = 1;
     printf("\n----Welcome to the True Man's world\n\n");
     while (should_run) {
+        printf("\033[1;31m"); // Change text color to red for screenshotting testcases
         printf("lulu>");
+        printf("\033[0m"); // Reset text color
         fflush(stdout);
 
         char *cmd = (char *)malloc((MAX_LINE + 1) * sizeof(char));
