@@ -54,23 +54,24 @@ int main(void) {
                 should_show_history = 1;
             }
            
-            int isAmpersand = 0;
+            int is_ampersand = 0;
             if(strcmp(args[param_num_l - 1], "&") == 0 && strcmp(args[0], "&") != 0) {
                 should_wait = 0;
                 args[param_num_l - 1] = NULL;
                 --param_num_l;
                 cmd[strlen(cmd) - 1] = '\0';
-                isAmpersand = 1;
+                is_ampersand = 1;
             }
             if(right[0] != NULL) {
-                if(strcmp(right[param_num_r - 1], "&") == 0 && strcmp(right[0], "&") != 0) {
-                    if(!isAmpersand) {
-                        should_wait = 0;
-                        right[param_num_r - 1] = NULL;
-                        --param_num_r;
-                        cmd[strlen(cmd) - 1] = '\0';
-                    }
-                    else continue;
+                if(is_ampersand) {
+                    printf("Misplace '&'.\n");
+                    continue;
+                }
+                else if(strcmp(right[param_num_r - 1], "&") == 0 && strcmp(right[0], "&") != 0) {
+                    should_wait = 0;
+                    right[param_num_r - 1] = NULL;
+                    --param_num_r;
+                    cmd[strlen(cmd) - 1] = '\0';
                 }
             }
             // Check whether or not the parent process is to wait for the child to exit.

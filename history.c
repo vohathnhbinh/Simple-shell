@@ -15,8 +15,8 @@ void showHistory(char *hist_list[], int hist_num) {
 }
 
 int loadLastCmd(char *hist_list[], int hist_num, char *args[], char *right[], int *param_num_l, int *param_num_r, int *is_pipe) {
-    if(hist_list[hist_num - 1][0] == '\0' || hist_num == 0) {
-        printf("There is no previous command.\n");
+    if(hist_list[0] == NULL || hist_num == 0) {
+        printf("No previous command found.\n");
         return 0;
     }
     else {
