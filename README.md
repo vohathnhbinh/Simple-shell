@@ -1,2 +1,7 @@
 # Simple-shell
-## Deadline: Saturday, 7th of November, 2020, 11:55 PM
+Một chương trình hoạt động như Linux shell
+# Chức năng
+* Các lệnh đơn giản như: ls, cat, cp, mv, rm, touch
+* Input, output redirection
+* Piping
+* Hoạt động dưới nền thông qua '&'
